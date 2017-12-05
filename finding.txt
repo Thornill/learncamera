@@ -1,0 +1,60 @@
+#include "include.h"
+#define NONE                       0
+#define FIND_1_BLACK               1
+#define FIND_MIDDLE_WHITE          2
+#define FIND_2_BLACK               3
+#define FIND_LINE_area             4
+#define FIND_LINE_area_LEFT        5
+#define FIND_LINE_area_MIDDLE      6
+#define FIND_LINE_area_RIGHT       7
+#define FIND_LINE_MIN_SCAN         130
+#define FIND_LINE_MAX_SCAN         230
+unsigned char LINE_DEBUG_L=0,LINE_DEBUG_M=0,LINE_DEBUG_R=0;
+unsigned char run()
+{
+  unsigned char status1=NONE,status2=NONE,status3=NONE;
+  unsigned char i = 0;
+  LINE_DEBUG_L=0,LINE_DEBUG_M=0,LINE_DEBUG_R=0;
+  for(i=FIND_LINE_MIN_SCAN;i<FIND_LINE_MAX_SCAN;i++)
+  {
+    if((status1==NONE)&&(Image_deal[160][i]==BLACK))
+	   status1 = FIND_1_BLACK;
+	else if((status1==FIND_1_BLACK)&&(Image_deal[160][i]==WHITE))
+	   status1=FIND_MIDDLE_WHITE;
+	else if((status1==FIND_MIDDLE_WHITE)&&(Image_deal[160][i]==BLACK))
+	   status1=FIND_LINE_area_MIDDLE;
+  }
+  if (status1 == FIND_LINE_area_MIDDLE)
+  {
+    for(i=FIND_LINE_MIN_SCAN;i<FIND_LINE_MAX_SCAN;i++)
+	{
+	  if((status2==NONE)&&(Image_deal[155][i]==BLACK))
+	  status2=FIND_1_BLACK;
+	  else if((status2==FIND_1_BLACK)&&(Image_deal[155][i]==WHITE))
+	  status2=FIND_MIDDLE_WHITE;
+	  else if((status2==FIND_MIDDLE_WHITE)&&(Image_deal[155][i]==BLACK))
+	  status2=FIND_2_BLACK;
+	  else if((status2==FIND_2_BLACK)&&(Image_deal[155][i]==WHITE))
+	  status2=FIND_LINE_area;
+	}
+	for(i=FIND_LINE_MIN_SCAN;i<FIND_LINE_MAX_SCAN;i++)
+	{
+	  if((status3==NONE)&&(Image_deal[165][i]==BLACK))
+	  status3=FIND_1_BLACK;
+	  else if((status3=FIND_1_BLACK)&&(Image_deal[165][i]==WHITE))
+	  status3=FIND_MIDDLE_WHITE;
+	  else if((status3==FIND_MIDDLE_WHITE)&&(Image_deal[165][i]==BLACK))
+	  status3=FIND_2_BLACK;
+	  else if((status3==FIND_2_BLACK)&&(Image_deal[165][i]==WHITE))
+	  status3=FIND_LINE_area;
+	}
+  }
+  if((status2==FIND_LINE_area)&&(status3==FIND_LINE_area))
+  {
+    status2=NONE,status3=NONE;
+	for(i=FIND_LINE_MIN_SCAN;i<FIND_LINE_MAX_SCAN;i++)
+	{
+	  if((status2==NONE)&&(Image_deal[
+	  
+  
+  
