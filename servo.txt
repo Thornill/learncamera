@@ -1,0 +1,27 @@
+#include "include.h"
+define M 400
+void servo_PID(void);
+void servo_PID()
+{
+  static int D_var=0;
+  int cal[M]={0};
+  float Di_Pservo[2]={4,0},Di_Dservo[2]={16,0};
+  float P_servo,D_servo;
+  int servo_output=0,Servo_output=0;
+  int last_err=0,now_err=0;
+  cal=CONTRE-now_center;//CONTRE为定义的赛道中心位置，now_center为图像的中心位置
+  now_err=cal[0];
+  P_servo=Di_Pservo[0];
+  D_servo=Di_Dservo[0];
+  D_var=(int)((now_err-last_err)*D_servo);
+  servo_output=(int)(now_err*P_servo+D_var);
+  
+  last_err=now_err;//保留上一个误差
+  
+  Servo_output=(int)(-servo_output+1200);
+  if(Servo_output<=800)
+  Servo_output=800;
+  else if(Servo_output>=2000)
+  Servo_output=2000;
+}
+  //Servo_output为全局变量，用来调控舵机的转向
