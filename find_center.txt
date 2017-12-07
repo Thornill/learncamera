@@ -1,0 +1,112 @@
+#include "include.h"
+#define N 400
+int find_middle(unsigned  char * ImageData_in,int hang);
+int find_middle(unsigned  char * ImageData_in,int hang)
+{
+  int i;
+  int scan_start=5;
+  int scan_end=315;
+  int left_side,right_side,left_side[N],right_side[N];
+  unsigned char left_flag=0,right_flag=0;
+  int centre[N],halfwith[N],left_flag[N],right_flag[N];
+  int postion_L[N],postion_R[N];
+  int middle,half;
+  int postion_R,postion_L;
+   static unsigned char first_run=0;
+   if(first_run==0)
+   {
+     first_run=1;
+     for(int count=0;count<240;count++)
+     {
+       centre[count]=160;//将每一行的中心初始化为160
+       halfwith[count]=80;//半宽为80
+     }
+   }
+   else
+   {
+     middle=centre[row];
+     half=halfwith[row];
+   }
+   //解压
+   for(i=0;i<40;i++)
+     for(int j=0;j<8;j++)
+       ImageData[i*8+j]=(ImageData_in[i]>>(7-j))&0x01;
+   //搜索边界，从中间向右搜索
+   right_side=CENTRE;
+   while(!(((ImageData[right_side+3]==BLACK)
+           &&(ImageData[right_side+2]==BLACK)
+		   &&(ImageData[right_side+1]==BLACK))
+           &&(right_side<scan_end)))
+		 {
+		 right_side++;
+		 }
+    if(right_side<scan_end)
+	{
+	  postion_R=right_side;
+	  right_flag=1;//找到右边界
+	 }
+	 else
+	 right_flag=0;
+	 //找左边界
+	 left_side=CENTRE;
+	 while(!(((ImageData[left_side-3]==BLACK)
+	        &&(ImageData[left_side-2]==BLACK)
+			&&(ImageData[left_side-1]==BLACK))
+			&&(left_side>scan_start)))
+			{
+			left_side--;
+			}
+	if(left_side>scan_start)
+			{
+			postion_L=left_side;
+			left_flag=1;//找到左边界
+			}
+	else
+			left_flag=0;
+	//计算中线
+	if(left_flag==0&&right_side==0)//未找到左右边界
+	{
+	middle=CENTRE;
+	}
+	else if(left_flag!=1&&right_flag==1)//找到右边界，未找到左边界，左转
+	{
+	middle=postion_L-half;//用上一次的半宽
+	postion_L=postion_R-2*half;
+	}
+	else if(right_flag!=1&&left_flag==1)//找到左边界，未找到右边界，右转
+	{
+	middle=postion_R-half;//用上一次的半宽
+	postion_R=postion_L+2*half;
+	}
+	else if(left_flag==1&&right_flag==1)
+	{
+	   if(postion_R-postion_L>=100)
+	{
+	   half=(int)((postion_R-postion_L)/2.0);
+	}
+	//半宽限幅
+	    if(half<80)
+	{
+        half=80;
+	}
+	    if(half>110)
+	{
+		half=110;
+    }
+		middle=(int)((postion_R+postion_L)/2.0)
+    
+  }
+  //保存上一次的值
+    if(middle<50)
+	middle=50;
+	if(middle>270)
+	middle=270;
+	left_flag[hang]=left_flag;
+	right_flag[hang]=right_flag;
+	postion_L[hang]=postion_L;
+	postion_R[hang]=postion_R;
+	left_side[hang]=left_side;
+	right_side[hang]=right_side;
+	
+	return middle;
+}
